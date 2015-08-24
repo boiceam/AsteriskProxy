@@ -1,0 +1,9 @@
+{
+   "asteriskAmiUsername":"username",
+   "asteriskAmiPassword":"password",
+   "asteriskAmiHttpHost":"127.0.0.1",
+   "asteriskAmiHttpProtocol":"http",
+   "asteriskAmiHttpPort":"8080",
+   "proxyPort":"3000",
+   "refreshInterval":"2"
+}
