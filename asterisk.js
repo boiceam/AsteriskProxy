@@ -31,11 +31,10 @@ module.exports = function () {
     var serverURL = "";
     var username = "";
     var password = "";
+    var queryInterval = 2000; //ms
 
     var loginTimeout = 0;
     var loginDuration = 60000; //ms
-
-    var queryInterval = 2000; //ms
 
     var updateTimer = null;
 

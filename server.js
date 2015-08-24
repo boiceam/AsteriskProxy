@@ -38,7 +38,6 @@ app.get('/queueSummary/', function (req, res) {
 var server = app.listen(ASTERISK_PROXY_PORT, function () {
     var host = server.address().address;
     var port = server.address().port;
-
     console.log('AsteriskProxy listening at http://%s:%s', host, port);
 });
 
