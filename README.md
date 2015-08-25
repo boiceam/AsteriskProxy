@@ -8,7 +8,7 @@ a HTTP interface for retrieving that data as JSON objects.
 ##Installing
 ####Install the prerequsites  
 ```
-sudo yum install nodejs npm
+sudo yum install nodejs npm git
 sudo npm -g install forever   
 ```
 ####Create the directory in which to install the server  

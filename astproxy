@@ -57,7 +57,7 @@
 NAME="AsteriskProxy"
 NODE_BIN_DIR="/usr/bin"
 NODE_PATH="/usr/lib/node_modules"
-APPLICATION_PATH="/opt/fenix/AsteriskProxy/server.js"
+APPLICATION_PATH="/opt/AsteriskProxy/server.js"
 PIDFILE="/var/run/AsteriskProxy.pid"
 LOGFILE="/var/log/AsteriskProxy.log"
 MIN_UPTIME="5000"

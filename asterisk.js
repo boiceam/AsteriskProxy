@@ -8,7 +8,8 @@ module.exports = function () {
     var request = require('request');
     var xml2js = require('xml2js');
 
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    var AMI_PROTOCOL = 'http';
+    var LOGIN_DURATION = 60000; //ms
 
     var manager = {};
     var log = console;
@@ -23,7 +24,6 @@ module.exports = function () {
 
     manager.cookieJar = request.jar();
 
-    var channel = "";
     var tasks = [];
     var activeTask = null;
     var working = false;
@@ -32,14 +32,11 @@ module.exports = function () {
     var username = "";
     var password = "";
     var queryInterval = 2000; //ms
-
     var loginTimeout = 0;
-    var loginDuration = 60000; //ms
-
     var updateTimer = null;
 
     manager.start = function (hostname, port, user, pass, interval) {
-        serverURL = "http://" + hostname + ":" + port + "/";
+        serverURL = AMI_PROTOCOL + "://" + hostname + ":" + port + "/";
         username = user;
         password = pass;
         queryInterval = interval*1000;
@@ -75,7 +72,6 @@ module.exports = function () {
     };
 
     function periodicUpdateTask() {
-        //log.info("Periodic Update Task");
         if (activeTask) {
             var d = new Date();
             var now = d.getTime();
@@ -83,13 +79,15 @@ module.exports = function () {
             if (delay > 5000) {
                 if (activeTask.attempt < 3) {
                     // resend the active task
-                    log.warn("Resending active task [backup]: " + activeTask.action);
+                    log.warn("Resending active task [%d]: %s", activeTask.attempt, activeTask.action);
                     sendRequest(activeTask);
                 } else {
                     startNextTask();
                 }
             }
         }
+
+        // send the requests that need to be periodically refreshed
         addTask("CoreShowChannels", {}, 'xml');
         addTask("QueueSummary", {}, 'xml');
         addTask("QueueStatus", {}, 'xml');
@@ -157,6 +155,7 @@ module.exports = function () {
                 log.error(e);
             }
         }
+
         if (response.headers['set-cookie']) {
             var headerName = 'set-cookie';
             if (Array.isArray(response.headers[headerName])) {
@@ -228,7 +227,7 @@ module.exports = function () {
     function requestErrorHandler(type, task, error) {
         log.warn("Unsuccessful " + task.action + " " + type + " request: " + error);
         if (task.attempts < 3) {
-            log.warn("Resending task: " + task.action);
+            log.warn("Resending task [%s]: %s", task.attempts, task.action);
             activeTask = task;
             sendRequest(task);
         } else {
@@ -236,8 +235,7 @@ module.exports = function () {
         }
     }
 
-    /** AJAX response manager to handle text responses from the Asterisk server
-     */
+    // AJAX response manager to handle text responses from the Asterisk server
     function textResponseManager(data, task) {
         log.info("Response from server = " + data);
         var lines = data.split("\n");
@@ -506,7 +504,7 @@ module.exports = function () {
         var remainingTime = loginTimeout - d.getTime();
 
         if ((remainingTime > 0) || force) {
-            loginTimeout = d.getTime() + loginDuration;
+            loginTimeout = d.getTime() + LOGIN_DURATION;
         }
     }
 
