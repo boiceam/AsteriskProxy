@@ -334,14 +334,24 @@ module.exports = function () {
         var events = getEvents(data, "ParkedCall");
         for(var i=0;i<events.length;i++){
             var call = {
-                "slot": events[i]["exten"],
-                "channel": events[i]["channel"],
-                "timeout": events[i]["timeout"],
-                "wait": events[i]["duration"],
-                "number": events[i]["calleridnum"],
-                "name": events[i]["calleridname"],
-                "owner": events[i]["connectedlinenum"],
-                "ownername": events[i]["connectedlinename"]
+                "lot": events[i]["parkinglot"],
+                "space": events[i]["parkingspace"],
+                "channel": events[i]["parkeechannel"],
+                "channelstate": events[i]["parkeechannelstate"],
+                "channelstatedesc": events[i]["parkeechannelstatedesc"],
+                "timeout": events[i]["parkingtimeout"],
+                "wait": events[i]["parkingduration"],
+                "number": events[i]["parkeecalleridnum"],
+                "name": events[i]["parkeecalleridname"],
+                "owner": events[i]["parkeeconnectedlinenum"],
+                "ownername": events[i]["parkeeconnectedlinename"],
+                "language": events[i]["parkeelanguage"],
+                "accountcode": events[i]["parkeeaccountcode"],
+                "context": events[i]["parkeecontext"],
+                "linkedid": events[i]["parkeelinkedid"],
+                "uniqueid": events[i]["parkeeuniqueid"],
+                "priority": events[i]["parkeepriority"],
+                "parker": events[i]["parkerdialstring"]
             };
             manager.data.parked.push(call);
         }
